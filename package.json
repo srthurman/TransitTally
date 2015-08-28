@@ -1,0 +1,23 @@
+{
+  "name": "transitNearMe",
+  "version": "1.0.0",
+  "description": "Find various transit POIs near a given point",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/srthurman/transitNearMe.git"
+  },
+  "author": "Sara Thurman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/srthurman/transitNearMe/issues"
+  },
+  "homepage": "https://github.com/srthurman/transitNearMe",
+  "dependencies": {
+    "turf-within": "^1.0.1"
+  },
+  "devDependencies": {}
+}

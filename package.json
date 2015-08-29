@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/srthurman/transitNearMe",
   "dependencies": {
+    "turf": "^2.0.2",
+    "turf-buffer": "^1.0.4",
     "turf-within": "^1.0.1"
   },
   "devDependencies": {}

@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/srthurman/transitNearMe",
   "dependencies": {
+    "jquery": "^2.1.4",
     "turf": "^2.0.2",
     "turf-buffer": "^1.0.4",
+    "turf-featurecollection": "^1.0.1",
     "turf-within": "^1.0.1"
   },
   "devDependencies": {}

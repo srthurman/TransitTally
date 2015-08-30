@@ -16,7 +16,7 @@ var map = L.mapbox.map('map','srthurman.n9l71i86')
     
 var wmataRoutes = L.mapbox.featureLayer()
     .loadURL(baseURI+'wmataRoutes')
-    .addTo(map);
+    //.addTo(map);
     
 var marker = L.marker(new L.LatLng(38.901078, -77.024361), {
     icon: L.mapbox.marker.icon({
@@ -30,7 +30,20 @@ var marker = L.marker(new L.LatLng(38.901078, -77.024361), {
 }).addTo(map);
 
 
-$.get(baseURI+'wmataStops', function(data) {
+var metro;
+var cabi;
+
+var loadWmata = $.get(baseURI+'wmataStops', function(data) {
+        console.log("wmata data loaded");
+        metro = data;
+    });
+    
+var loadCabi = $.get(baseURI+'cabi', function(data) {
+        console.log("cabi data loaded");
+        cabi = data;
+    });
+    
+$.when(loadWmata, loadCabi).done(function() {
     //click-move functionality
     map.on('click',function(e){
         marker.setLatLng([e.latlng.lat, e.latlng.lng]);
@@ -61,27 +74,60 @@ $.get(baseURI+'wmataStops', function(data) {
         
         //load stops and filter based on buffer
         var filteredStops = L.mapbox.featureLayer().addTo(map);
-        var stops = within(data, fc([transitBuffer]));
-        console.log(stops);
+        var bufferFC = fc([transitBuffer]);
+        var stops = within(metro, bufferFC);
         
         var metroStops = [];
-        for (s=0,l=stops.features.length;s<l;s++) {
+        for (var s=0,l=stops.features.length;s<l;s++) {
             var currStop = stops.features[s];
+            
             var str = currStop['name'];
             var re = /metro station/i;
             var found = str.match(re);
             if (found) {
+                console.log(currStop);
+                currStop.properties["marker-color"] = "#666";
+                currStop.properties["marker-size"] = "large";
+                currStop.properties["marker-symbol"] = "m";
                 metroStops.push(currStop);
             };
         }
-        console.log(fc([metroStops]).features[0]);
         filteredStops.setGeoJSON(fc([metroStops]).features[0]);
+        
+        
+        var cabiStations = [];
+        
+        for (var c=0, l=cabi.length;c<l;c++) {
+            var station = cabi[c]
+            cabiStations.push(point([station.long[0],station.lat[0]],
+                {"name": station.name[0],
+                "currBikes": station.nbBikes[0],
+                "marker-color": "#E60000",
+                "marker-size": "medium",
+                "marker-symbol": "bicycle"
+                }));
+        }
+        //var cabiFC = fc(cabiStations);
+        var filteredCabi = L.mapbox.featureLayer().addTo(map);
+        var cabiFC = fc(cabiStations);
+        var cabis = within(cabiFC, bufferFC);
+        console.log(cabis);
+        filteredCabi.setGeoJSON(cabis);
+        
+        var cabiStationCount = cabis.features.length;
+        var cabiBikeCount = 0;
+        for (var b=0,l=cabis.features.length;b<l;b++) {
+            var station = cabis.features[b];
+            cabiBikeCount += Number(station.properties.currBikes);
+        }
         
         var metroStopCount = metroStops.length;
         var busStopCount = stops.features.length - metroStopCount;
         
         $('#metroStopTally').html(metroStopCount);
         $('#busStopTally').html(busStopCount);
+        $('#cabiStationTally').html(cabiStationCount);
+        $('#cabiBikesTally').html(cabiBikeCount);
     }
     marker.on('drag', function(){updateTransitPoints()});
     updateTransitPoints();

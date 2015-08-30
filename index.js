@@ -4,6 +4,9 @@ var bartStops = require('./bartStops.json');
 
 var wmataMetro = require('./wmata_metro.json');
 var wmataCirculator = require('./wmata_circulator.json');
+var bikeshare = require('node-capital-bikeshare');
+
+var request = require('request');
 
 var app = express();
 
@@ -50,7 +53,12 @@ var wmataRoutes = {
 app.get('/wmataRoutes', function(req, res) {
     res.json(wmataRoutes);
 });
-
+    
+app.get('/cabi', function(req, res) {
+    bikeshare.getAll(function(err, data) {
+      res.json(data);
+    });
+})
 app.use(express.static('public'));
 
 app.listen(process.env.PORT, process.env.IP);

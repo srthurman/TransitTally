@@ -5,6 +5,7 @@ var fc = require('turf-featurecollection');
 var $ = require('jquery');
 //var turf = require('turf');
 
+console.log(within);
 var baseURI = window.location.href;
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoic3J0aHVybWFuIiwiYSI6IkVGXy1NMHcifQ.EouINDEZGzjGs0x0VMhHxg';
@@ -42,7 +43,9 @@ var pt = {
     "coordinates": [bufferCntr.lng, bufferCntr.lat]
   }
 };
-var transitBuffer = buffer(pt, 2, 'miles');
+
+
+var transitBuffer = buffer(pt, 3, 'miles');
 
 transitBuffer.properties = {
                 "fill": "#00704A",
@@ -53,83 +56,11 @@ transitBuffer.properties = {
             };
 
 bufferLayer.setGeoJSON(transitBuffer);
-console.log(fc([transitBuffer]));
 
+//load stops and filter based on buffer
 var filteredStops = L.mapbox.featureLayer().addTo(map);
 
 $.get('https://transitnearme-srthurman.c9.io/bartStops', function(data) {
-    console.log(data);
     var stops = within(data, fc([transitBuffer]));
-    console.log(stops);
     filteredStops.setGeoJSON(stops);
 });
-
-var searchWithin = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [[
-          [-46.653,-23.543],
-          [-46.634,-23.5346],
-          [-46.613,-23.543],
-          [-46.614,-23.559],
-          [-46.631,-23.567],
-          [-46.653,-23.560],
-          [-46.653,-23.543]
-        ]]
-      }
-    }
-  ]
-};
-var points = {
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-46.6318, -23.5523]
-      }
-    }, {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-46.6246, -23.5325]
-      }
-    }, {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-46.6062, -23.5513]
-      }
-    }, {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-46.663, -23.554]
-      }
-    }, {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [-46.643, -23.557]
-      }
-    }
-  ]
-};
-
-var test = within(points, searchWithin);
-console.log(within);
-//console.log(test);
-
-//
-            

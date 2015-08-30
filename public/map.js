@@ -5,23 +5,18 @@ var fc = require('turf-featurecollection');
 var $ = require('jquery');
 //var turf = require('turf');
 
-console.log(within);
 var baseURI = window.location.href;
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoic3J0aHVybWFuIiwiYSI6IkVGXy1NMHcifQ.EouINDEZGzjGs0x0VMhHxg';
 
 var map = L.mapbox.map('map','srthurman.n9l71i86')
-    .setView([37.803291, -122.291137], 13);
+    .setView([38.901078, -77.024361], 14);
     
-var bartRoutes = L.mapbox.featureLayer()
-    .loadURL('https://transitnearme-srthurman.c9.io/bart')
+var wmataRoutes = L.mapbox.featureLayer()
+    .loadURL('https://transitnearme-srthurman.c9.io/wmataRoutes')
     .addTo(map);
     
-//var bartStops = L.mapbox.featureLayer()
-//    .loadURL('https://transitnearme-srthurman.c9.io/bartStops')
-    //.addTo(map);
-    
-var marker = L.marker(new L.LatLng(37.803291, -122.291137), {
+var marker = L.marker(new L.LatLng(38.901078, -77.024361), {
     icon: L.mapbox.marker.icon({
         "marker-color": "#FF00FF",
         "title": "You need coffee",
@@ -44,8 +39,7 @@ var pt = {
   }
 };
 
-
-var transitBuffer = buffer(pt, 3, 'miles');
+var transitBuffer = buffer(pt, 0.5, 'miles');
 
 transitBuffer.properties = {
                 "fill": "#00704A",
@@ -60,7 +54,7 @@ bufferLayer.setGeoJSON(transitBuffer);
 //load stops and filter based on buffer
 var filteredStops = L.mapbox.featureLayer().addTo(map);
 
-$.get('https://transitnearme-srthurman.c9.io/bartStops', function(data) {
+$.get('https://transitnearme-srthurman.c9.io/wmataStops', function(data) {
     var stops = within(data, fc([transitBuffer]));
     filteredStops.setGeoJSON(stops);
 });

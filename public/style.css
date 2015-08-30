@@ -29,6 +29,11 @@ body {
  -moz-box-flex:  0;
  -ms-box-flex:  0;
  box-flex:  0;  
+ color: white;
+}
+
+#tallies {
+  padding: 15px;
 }
 
 

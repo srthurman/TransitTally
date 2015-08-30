@@ -77,7 +77,11 @@ $.get(baseURI+'wmataStops', function(data) {
         console.log(fc([metroStops]).features[0]);
         filteredStops.setGeoJSON(fc([metroStops]).features[0]);
         
-        $('#busStopTally').html(stops.features.length);
+        var metroStopCount = metroStops.length;
+        var busStopCount = stops.features.length - metroStopCount;
+        
+        $('#metroStopTally').html(metroStopCount);
+        $('#busStopTally').html(busStopCount);
     }
     marker.on('drag', function(){updateTransitPoints()});
     updateTransitPoints();

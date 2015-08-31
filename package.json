@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/srthurman/transitNearMe",
   "dependencies": {
+    "express": "~3.2.4",
     "jquery": "^2.1.4",
     "jsonfile": "^2.2.1",
     "node-capital-bikeshare": "^1.2.1",

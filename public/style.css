@@ -6,46 +6,51 @@ body {
 }
 
 #wrapper {
+  display:flex;
   height: 100%;
-  min-width: 1000px;
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-box;
-  display: box;
-  
-  -ms-flex-direction: row;
-  -webkit-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  -ms-box-orient: horizontal;
-  box-orient: horizontal;
+}
+
+#main {
+    /* This makes the element grow and take all available space, not taken by the sidebar */
+    flex-grow:1;
 }
 
 #sidebar {
-  background: black;
-  width: 30%;
- -ms-flex: 0 100px;
- -webkit-box-flex:  0;
- -moz-box-flex:  0;
- -ms-box-flex:  0;
- box-flex:  0;  
- color: white;
+    /* Give the sidebar a default width, and prevent it from shrinking */
+    flex-shrink:0;
+    width:300px;
+    background: black;
+    color: white;
 }
 
 #tallies {
-  padding: 15px;
-}
-
-
-#main {
- -ms-flex: 1;
- -webkit-box-flex: 1;
- -moz-box-flex: 1;
- -ms-box-flex: 1;
- box-flex: 1;  
- height: 100%;
+  padding: 0 15px;
 }
 
 #map {
   height: 100%;
+}
+
+#radiusWrapper {
+  padding: 15px 15px 0 15px;
+}
+
+input[type="range"] {
+  background: white;
+  padding: 3px;
+  display: block;
+}
+
+@media all and (max-width: 800px) {
+
+    #wrapper {
+        flex-flow:column;
+    }
+
+    /* Make the sidebar take the entire width of the screen */
+
+    #sidebar {
+        width:auto;
+    }
+
 }

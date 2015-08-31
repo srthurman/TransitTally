@@ -7,7 +7,7 @@ var $ = require('jquery');
 //var turf = require('turf');
 
 var baseURI = window.location.href;
-var currentRadius = 0.5;
+var currentRadius = 0;
 
 L.mapbox.accessToken = 'pk.eyJ1Ijoic3J0aHVybWFuIiwiYSI6IkVGXy1NMHcifQ.EouINDEZGzjGs0x0VMhHxg';
 
@@ -51,6 +51,7 @@ $.when(loadWmata, loadCabi).done(function() {
     
     // get position, get radius, draw buffer, find within, calculate distances, find nearest, add to map
     function updateTransitPoints(){
+        $('#tallies svg').remove();
         $('path').remove();
         $('.leaflet-marker-pane *').not(':first').remove();
         var position=marker.getLatLng();
@@ -112,9 +113,12 @@ $.when(loadWmata, loadCabi).done(function() {
         
         var cabiStationCount = cabis.features.length;
         var cabiBikeCount = 0;
+        var cabiStationBikeCount = [];
         for (var b=0,l=cabis.features.length;b<l;b++) {
             var station = cabis.features[b];
-            cabiBikeCount += Number(station.properties.currBikes);
+            var bikeCount = Number(station.properties.currBikes);
+            cabiBikeCount += bikeCount;
+            cabiStationBikeCount.push(bikeCount);
         }
         
         var metroStopCount = metroStops.length;
@@ -124,7 +128,52 @@ $.when(loadWmata, loadCabi).done(function() {
         $('#busStopTally').html(busStopCount);
         $('#cabiStationTally').html(cabiStationCount);
         $('#cabiBikesTally').html(cabiBikeCount);
+        
+        ////D3 to create charts
+        transitViz(cabiStationCount, cabiStationBikeCount, metroStopCount, busStopCount);
+        
     }
+    
+    function transitViz(bikeStations, bikes, bus, metro) {
+    var w = $("#tallies").width();
+        var h = 100;
+        var padding = 2;
+        var dataset = bikes;
+        var svg = d3.select("#tallies").append("svg")
+            .attr("width", w)
+            .attr("height",h);
+            
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()
+            .append("rect")
+                .attr("x", function(d, i) {
+                    return i * (w/dataset.length);
+                })
+                .attr("y", function(d) {
+                    return h - (d);
+                })
+                .attr("width", w/dataset.length - padding)
+                .attr("height", function(d) {
+                    return d*2;
+                })
+                .attr("fill", "blue");
+    }
+    
+    ///Update radius
+    function updateRadius() {
+       var val = $('#radiusSelect').val();
+       $("#radiusVal").val(val);
+       
+       currentRadius = Number(val)/20;
+       updateTransitPoints();
+    }
+    
+    $('#radiusSelect').change(function() {
+       updateRadius();
+    });
+
     marker.on('drag', function(){updateTransitPoints()});
-    updateTransitPoints();
+    updateRadius();
+    //updateTransitPoints();
 });

@@ -34,12 +34,10 @@ var metro;
 var cabi;
 
 var loadWmata = $.get(baseURI+'wmataStops', function(data) {
-        console.log("wmata data loaded");
         metro = data;
     });
     
 var loadCabi = $.get(baseURI+'cabi', function(data) {
-        console.log("cabi data loaded");
         cabi = data;
     });
     
@@ -85,7 +83,6 @@ $.when(loadWmata, loadCabi).done(function() {
             var re = /metro station/i;
             var found = str.match(re);
             if (found) {
-                console.log(currStop);
                 currStop.properties["marker-color"] = "#666";
                 currStop.properties["marker-size"] = "large";
                 currStop.properties["marker-symbol"] = "m";
@@ -111,7 +108,6 @@ $.when(loadWmata, loadCabi).done(function() {
         var filteredCabi = L.mapbox.featureLayer().addTo(map);
         var cabiFC = fc(cabiStations);
         var cabis = within(cabiFC, bufferFC);
-        console.log(cabis);
         filteredCabi.setGeoJSON(cabis);
         
         var cabiStationCount = cabis.features.length;

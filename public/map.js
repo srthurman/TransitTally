@@ -12,7 +12,7 @@ var currentRadius = 0;
 L.mapbox.accessToken = 'pk.eyJ1Ijoic3J0aHVybWFuIiwiYSI6IkVGXy1NMHcifQ.EouINDEZGzjGs0x0VMhHxg';
 
 var map = L.mapbox.map('map','srthurman.n9l71i86')
-    .setView([38.901078, -77.024361], 15);
+    .setView([38.901078, -77.024361], 14);
     
 var wmataRoutes = L.mapbox.featureLayer()
     .loadURL(baseURI+'wmataRoutes')
@@ -45,11 +45,11 @@ $.when(loadWmata, loadCabi).done(function() {
     //click-move functionality
     map.on('click',function(e){
         marker.setLatLng([e.latlng.lat, e.latlng.lng]);
-        map.setView([e.latlng.lat, e.latlng.lng],15);
+        map.setView([e.latlng.lat, e.latlng.lng],14);
         updateTransitPoints();
     });
     
-    // get position, get radius, draw buffer, find within, calculate distances, find nearest, add to map
+    // get position, get radius, draw buffer, find within, add to map
     function updateTransitPoints(){
         $('#tallies svg').remove();
         $('path').remove();

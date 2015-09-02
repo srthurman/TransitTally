@@ -135,10 +135,24 @@ $.when(loadWmata, loadCabi).done(function() {
     }
     
     function transitViz(bikeStations, bikes, bus, metro) {
-    var w = $("#tallies").width();
+        var w = $("#tallies").width();
+        console.log(w);
         var h = 100;
         var padding = 2;
-        var dataset = bikes;
+        var dataset = bikes.sort(function(a, b){return a-b});
+        
+        var xScale = d3.scale.linear()
+            .domain([0,dataset.length])
+            .range([10,w]);
+            
+        console.log(xScale(dataset.length));
+            
+        var yScale = d3.scale.linear()
+            .domain([dataset[0],dataset[dataset.length-1]])
+            .range([h,0]);
+        
+        console.log(yScale(dataset[0]));
+        
         var svg = d3.select("#tallies").append("svg")
             .attr("width", w)
             .attr("height",h);
@@ -148,14 +162,16 @@ $.when(loadWmata, loadCabi).done(function() {
             .enter()
             .append("rect")
                 .attr("x", function(d, i) {
-                    return i * (w/dataset.length);
+                    //return i * (w/dataset.length);
+                    return xScale(i);
                 })
                 .attr("y", function(d) {
-                    return h - (d);
+                    return h - d;
+                    //return yScale(d);
                 })
                 .attr("width", w/dataset.length - padding)
                 .attr("height", function(d) {
-                    return d*2;
+                    return d*4;
                 })
                 .attr("fill", "blue");
     }

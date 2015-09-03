@@ -4,7 +4,6 @@ var fc = require('turf-featurecollection');
 var point = require('turf-point');
 
 var $ = require('jquery');
-//var turf = require('turf');
 
 var baseURI = window.location.href;
 var currentRadius = 0;
@@ -130,17 +129,16 @@ $.when(loadWmata, loadCabi).done(function() {
         
         ////D3 to create charts
         transitViz(cabiStationCount, cabiStationBikeCount, metroStopCount, busStopCount);
-        
     }
     
     function transitViz(bikeStations, bikes, metro, bus) {
         ///metro styling
         $('.trainImg').remove();
         if (metro === 0) {
-            var noTrain = '<img class="trainImg" src="close.svg" alt="no train icon">';
+            var noTrain = '<img class="trainImg" src="img/close.svg" alt="no train icon">';
             $('#metroStopTally').append(noTrain);
         } else {
-            var train = '<img class="trainImg" src="train.svg" alt="train icon">';
+            var train = '<img class="trainImg" src="img/train.svg" alt="train icon">';
             for (var m=1;m<=metro;m++) {
                 $('#metroStopTally').append(train);
             }

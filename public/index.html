@@ -23,23 +23,27 @@
             
             <div id="sidebar">
                 <div id = "radiusWrapper">
-                    <output for="radiusSelect" id="radiusVal">10</output> minute walk
+                    <p><output for="radiusSelect" id="radiusVal">10</output> minute walk</p>
                     <input id="radiusSelect" type="range" min="5" max="20" step ="1" value="10"/>
                 </div>
                 <div id="tallies">
-                    <p>
-                        Total metro stops: <span id="metroStopTally"></span>
-                    </p>
-                    <p>
+                    <div id="bus">
+                       <h1>Bus Stops</h1>
                         <span id="busStopTally"></span>
                         <img id="busImg" src="bus_stop.svg" alt="bus stop icon">
-                    </p>
-                    <p>
-                        Total Capital Bikeshare stations: <span id="cabiStationTally"></span>
-                    </p>
-                    <p>
-                        Total bikes available: <span id="cabiBikesTally"></span>
-                    </p>
+                    </div>
+                    <div id="metro">
+                      <h1>Metro Stops</h1>
+                      <div id="metroStopTally">
+                        <!--Total metro stops: <span></span>-->
+                      </div>  
+                    </div>
+                    <div id="bikes">
+                        <h1>Capital Bikeshare</h1>
+                        <div id="bikeChart"></div>
+                        <p>Capital Bikeshare stations: <span id="cabiStationTally"></span></p>
+                        <p>Bikes available: <span id="cabiBikesTally"></span></p>
+                    </div>
                 </div>
             </div>
         </div>

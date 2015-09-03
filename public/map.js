@@ -124,7 +124,6 @@ $.when(loadWmata, loadCabi).done(function() {
         var metroStopCount = metroStops.length;
         var busStopCount = stops.features.length - metroStopCount;
         
-        $('#metroStopTally').html(metroStopCount);
         $('#busStopTally').html(busStopCount);
         $('#cabiStationTally').html(cabiStationCount);
         $('#cabiBikesTally').html(cabiBikeCount);
@@ -134,44 +133,53 @@ $.when(loadWmata, loadCabi).done(function() {
         
     }
     
-    function transitViz(bikeStations, bikes, bus, metro) {
+    function transitViz(bikeStations, bikes, metro, bus) {
+        ///metro styling
+        $('.trainImg').remove();
+        if (metro === 0) {
+            var noTrain = '<img class="trainImg" src="close.svg" alt="no train icon">';
+            $('#metroStopTally').append(noTrain);
+        } else {
+            var train = '<img class="trainImg" src="train.svg" alt="train icon">';
+            for (var m=1;m<=metro;m++) {
+                $('#metroStopTally').append(train);
+            }
+        }
+        
+        ///bike styling
         var w = $("#tallies").width();
-        var h = $("#sidebar").height()/5;
+        var h = $("#sidebar").height()/6;
         var padding = 2;
-        var yAxisPadding = 20;
-        var dataset = bikes.sort(function(a, b){return a-b}).reverse();
+        var bikeDataset = bikes.sort(function(a, b){return a-b}).reverse();
         
         var xScale = d3.scale.linear()
-            .domain([0,dataset.length])
-            .range([yAxisPadding/2,w-yAxisPadding]);
+            .domain([0,bikeDataset.length])
+            .range([0,w]);
             
         var yScale = d3.scale.linear()
-            .domain([
-                d3.min(dataset),
-                d3.max(dataset)
-                ])
-            .range([h-yAxisPadding,10]);
-        
-        var yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(0);
-        
+            .domain([0,d3.max(bikeDataset)])
+            .range([h,0]);
 
-        var svg = d3.select("#tallies").append("svg")
+        var svg = d3.select("#bikeChart").append("svg")
             .attr("width", w)
             .attr("height",h);
 
         svg.selectAll("rect")
-            .data(dataset)
+            .data(bikeDataset)
             .enter()
             .append("rect")
                 .attr("x", function(d, i) {
                     //return i * (w/dataset.length);
+                    console.log(xScale(i));
                     return xScale(i);
                 })
                 .attr("y", function(d) {
+                    console.log(yScale(d));
                     return yScale(d);
                 })
-                .attr("width", w/dataset.length - padding)
+                .attr("width", w/bikeDataset.length - padding)
                 .attr("height", function(d) {
+                    console.log(h - yScale(d));
                     return h - yScale(d);
                 })
                 .attr("fill", "blue");

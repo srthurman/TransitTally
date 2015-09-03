@@ -136,25 +136,29 @@ $.when(loadWmata, loadCabi).done(function() {
     
     function transitViz(bikeStations, bikes, bus, metro) {
         var w = $("#tallies").width();
-        var h = 100;
+        var h = $("#sidebar").height()/5;
         var padding = 2;
-        var dataset = bikes.sort(function(a, b){return a-b});
+        var yAxisPadding = 20;
+        var dataset = bikes.sort(function(a, b){return a-b}).reverse();
         
         var xScale = d3.scale.linear()
             .domain([0,dataset.length])
-            .range([0,w]);
+            .range([yAxisPadding/2,w-yAxisPadding]);
             
         var yScale = d3.scale.linear()
             .domain([
                 d3.min(dataset),
                 d3.max(dataset)
                 ])
-            .range([h,0]);
+            .range([h-yAxisPadding,10]);
         
+        var yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(0);
+        
+
         var svg = d3.select("#tallies").append("svg")
             .attr("width", w)
             .attr("height",h);
-            
+
         svg.selectAll("rect")
             .data(dataset)
             .enter()

@@ -60,6 +60,36 @@ input[type="range"] {
   margin: 0 auto;
 }
 
+.axis text {
+  fill: white;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+}
+
+span {
+  width: 91%;
+  text-align: center;
+}
+
+#busImg {
+  display: block;
+  width: 60%;
+  margin: 0 auto;
+}
+
+#busStopTally {
+  color: red;
+  font-size: 4.5em;
+  font-family: sans-serif;
+  position: absolute;
+  top: 150px;
+}
+
 @media all and (max-width: 800px) {
 
     #main {

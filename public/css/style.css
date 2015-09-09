@@ -39,6 +39,7 @@ body {
     width: 400px; 
     background: black;
     color: white;
+    overflow-y: auto;
 }
 
 #tallies {

@@ -1,43 +1,23 @@
 var express = require('express');
 
-var wmataMetro = require('./wmata_metro.json');
-var wmataCirculator = require('./wmata_circulator.json');
 var bikeshare = require('node-capital-bikeshare');
-
-var request = require('request');
+var wmata = require('./src/js/utils/wmata');
 
 var app = express();
+app.set('views', './views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
-var allWmataStops = wmataMetro['features'].concat(wmataCirculator['features'])
-
-var wmataStops = {
-        type: wmataMetro['type'],
-        features:allWmataStops
-};
-    
-app.get('/wmataStops', function(req, res) {
-    res.json(wmataStops);
+app.get('/', function(req, res) {
+    res.render('index');
 });
 
-var metroRoutes = [];
+app.get('/wmataStops', function(req, res) {
+    res.json(wmata.stops);
+});
 
-for (i=0,l=wmataMetro['routes'].length;i<l;i++) {
-    var currRoute = wmataMetro['routes'][i];
-    var str = currRoute['properties'][3];
-    var re = /metrorail/i;
-    var found = str.match(re);
-    if (found) {
-        metroRoutes.push(currRoute);
-    };
-};  
-
-var wmataRoutes = {
-        type: wmataMetro['type'],
-        features: metroRoutes
-    };
-    
 app.get('/wmataRoutes', function(req, res) {
-    res.json(wmataRoutes);
+    res.json(wmata.routes);
 });
     
 app.get('/cabi', function(req, res) {
@@ -45,6 +25,6 @@ app.get('/cabi', function(req, res) {
       res.json(data);
     });
 })
-app.use(express.static('public'));
+app.use(express.static('dist'));
 
 app.listen(process.env.PORT, process.env.IP);
